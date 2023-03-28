@@ -48,13 +48,14 @@ def __repr__(self):
     
 # Review Table
 
-class Reviews(Base):
+class Review(Base):
     __tablename__ = 'reviews'
     __table_args__ = (PrimaryKeyConstraint('id'),)
 
     id = Column(Integer())
     student_id = Column(Integer(), ForeignKey('students.id'))
     teacher_id = Column(Integer(), ForeignKey('teachers.id'))
+    program = Column(String())
     comment = Column(String())
     rating = Column(Float())
     date = Column(DateTime(), server_default=func.now())
@@ -65,6 +66,8 @@ class Reviews(Base):
     
     def __repr__(self):
         return f"< Id: {self.id}, " \
-            + f"Name:{self.name}, " \
-            + f"program: {self.program}, "\
-            + f"email: {self.email} >"
+            + f"Student_ID:{self.student_id}, " \
+            + f"Teacher_ID:{self.teacher_id}, " \
+            + f"Program: {self.program}, "\
+            + f"Coment: {self.comment}, "\
+            + f"Email: {self.email} >"
