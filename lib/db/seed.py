@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from models import Student, Teacher, Review
 
 if __name__ == '__main__':
-    engine = create_engine("sqlite:///reviews.db")
+    engine = create_engine("sqlite:///db/reviews.db")
     Session = sessionmaker(bind=engine)
     session = Session()
 
