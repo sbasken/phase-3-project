@@ -27,7 +27,7 @@ if __name__ == '__main__':
             name = f"{faker.first_name()} {faker.last_name()}",
             program = random.choice(programs),
             email = faker.email(),
-            phone_number = random.randint(1000000000, 9999999999)
+            phone_number = f"({random.randint(100, 999)}) {random.randint(100, 999)} - {random.randint(1000, 9999)}"
         )
         
         session.add(student)
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     
     reviews = []
     student_comments = ['Best class ever!', 'It was challenging, but I\'m glad I got through it!', 'I would not recommend this class.', 'I don\'t think I\'ll ever use this class in real life.', 'I would take this class again if I could!']
-    teacher_comments = ['Great work!', 'Need to work on attendance...', 'Good job!', 'Had a great time teaching this class!', 'Curriculum team needs to work on the modules...', 'Testing file needs to be improved...', 'Excellent work!', 'Great team work']
+    teacher_comments = ['Great work!', 'Need to work on attendance...', 'Good job!', 'Had a great time teaching this class!', 'Curriculum team needs to work on the modules...', 'Testing file needs to be improved...', 'Excellent work!', 'Great team work', 'Good attendance and engagement', 'Excellent project and presentation', 'Great work but don\'t forget to take a break and rest!', 'Student of the year!', 'Exhibited great perseverance', 'Modules missing some lessons']
     reviewers = [ "student", "teacher" ] 
 
     for _ in range(80):
@@ -63,7 +63,7 @@ if __name__ == '__main__':
         
             review = Review(
                 student_id = random.choice(students).id,
-                # teacher_id= random.choice(teachers).id,
+                program = random.choice(programs),
                 comment = random.choice(student_comments),
                 rating = random.randint(1,5),
                 date = faker.date_this_year()
@@ -76,6 +76,7 @@ if __name__ == '__main__':
         else:
             review = Review(
                 teacher_id= random.choice(teachers).id,
+                program = random.choice(programs),
                 comment = random.choice(teacher_comments),
                 rating = random.randint(1,5),
                 date = faker.date_this_year()
