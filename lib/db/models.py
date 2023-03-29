@@ -53,8 +53,8 @@ class Review(Base):
     __table_args__ = (PrimaryKeyConstraint('id'),)
 
     id = Column(Integer())
-    student_id = Column(Integer(), ForeignKey('students.id'))
-    teacher_id = Column(Integer(), ForeignKey('teachers.id'))
+    student_id = Column(Integer(), ForeignKey('students.id'), default="NULL")
+    teacher_id = Column(Integer(), ForeignKey('teachers.id'), default="NULL")
     program = Column(String())
     comment = Column(String())
     rating = Column(Float())

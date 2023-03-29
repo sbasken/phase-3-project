@@ -20,10 +20,10 @@ NO = ['N', 'n','no']
 
 def main_menu():
         print('')
-        print("Hello! Thank you for taking the time to write a review!")
+        print("Hello! Welcome to *Reviewer*")
         print('')
         print('''
-                 ___              ___  
+                 _v_              _v_  
                 (o o)            (o o) 
                (  V  ) Reviewer (  V  )
                --m-m--------------m-m--
@@ -36,7 +36,7 @@ def main_menu():
                 Please select which one you are:
                 1 - Student
                 2 - Teacher
-                3 - Quit Program
+                0 - Quit Program
 
                 ENTER: '''))
             if identity == 1:
@@ -58,14 +58,16 @@ def student_login_page():
     student_program_password = str(input("Enter your Program Password: "))
     student = session.query(Student).filter_by(name=student_name).first()
     if student and student_program_password == "password":
-        student_page()
+        student_page(student)
     else:
         print("No name found - Please re-enter Name.")
         student_login_page()
 
-def student_page():
+def student_page(student):
     page_num = 3
     student_menu_choice = int(input(f'''
+            Hi {student.name}!
+            
             Please select:
             1 - Write a Review
             2 - See Reviews you have Written
@@ -74,12 +76,12 @@ def student_page():
             5 - Delete a Review
             6 - Create new Profile (coming soon!!)
             7 - Go Back
-            8 - Quit Program
+            0 - Quit Program
 
             ENTER: '''))
     if student_menu_choice == 1:
         student_page = 2
-        student_write_reivew()
+        student_write_reivew(student)
 
     elif student_menu_choice == 2:
         student_page = 3
@@ -110,11 +112,18 @@ def student_page():
 #     else:
 #         print("Invalid selection. Please try again.")
 
-def student_write_reivew():
-    student_page = 2
+def student_write_reivew(student):
     print('')
     student_review = str(input("Write your Honest Review: "))
-#     review = 
+    student_rating = float(input("Leave your Honest Rating of the Program (1-5): "))
+
+    review = Review(student_id=student.id, program=student.program, comment=student_review, rating=student_rating)
+
+    session.add(review)
+    session.commit()
+
+    print('Thank you for Submitting a Review!')
+    # student_page()
 
 # def view_student_reviews():
 #     teacher_review_page = 1
@@ -127,14 +136,14 @@ def student_write_reivew():
 #                 1 - Filter By Program
 #                 2 - See Your Reviews
 #                 3 - Go Back
-#                 4 - Quit Program
+#                 0 - Quit Program
 
 #                 ENTER: '''))
 
 #### FOR BOTH TEACHERS AND STUDENTS:
 def create_reviews_table(reviews):
     table = PrettyTable()
-    table.title = ' REVIEWS '
+    table.title = ' 📝 REVIEWS 📝'
     table.field_names = ['Student ID', 'Teacher ID', 'Comment', 'Rating', 'Date', 'Program']
     for review in reviews:
         table.add_row([
@@ -165,7 +174,7 @@ def create_reviews_table(reviews):
 #         print("Hello! Thank you for taking the time to write a review!")
 #         print('')
 #         print('''
-#                  ___              ___  
+#                  _v_              _v_  
 #                 (o o)            (o o) 
 #                (  V  ) Reviewer (  V  )
 #                --m-m--------------m-m--
@@ -178,7 +187,7 @@ def create_reviews_table(reviews):
 #                 Please select which one you are:
 #                 1 - Student
 #                 2 - Teacher
-#                 3 - Quit Program
+#                 0 - Quit Program
 
 #                 ENTER: '''))
 #             if identity == 1:
@@ -198,64 +207,90 @@ def teacher_login_page():
     teacher_login_page = 1
     if teacher_login_page == 1:
         teacher_name = str(input("Enter Your Name:  "))
-        teacher_password = input("Enter Your Employee Password: ")
-        teacher_id = session.query(Teacher).filter_by(name=teacher_name).first().id
-        if teacher_id and teacher_password == "flatsteel school":
+        teacher_password = str(input("Enter Your Employee Password: "))
+        teacher = session.query(Teacher).filter_by(name=teacher_name).first()
+        if teacher and teacher_password == "flatsteel school":
             teacher_login_page = 2
-            teacher_page()
+            teacher_page(teacher)
         else:
             print("No Name Found - Please Re-Enter Your Name")
             teacher_login_page()
 
-def teacher_page():
-    teacher_page = 1
-    if teacher_page == 1:
+def teacher_page(teacher):
+    teacher_page = 0
+    if teacher_page == 0:
         choice = int(input(f'''
+                Hi {teacher.name}!
                 Please select:
                 1 - See All Reviews
                 2 - Write a New Review
-                3 - Delete Your Review
+                3 - Delete Your Review(s)
                 4 - Update Your Review
                 5 - Go Back
-                6 - Quit Program
+                0 - Quit Program
 
                 ENTER: '''))
         if choice == 1:
-            teacher_page = 2
-            teacher_reviews()
+            teacher_page = 1
+            teacher_reviews(teacher)
         elif choice == 2:
-            teacher_page = 2
-            teacher_write_review()
+            teacher_page = 1
+            teacher_write_review(teacher)
         elif choice == 3:
-            teacher_page = 3
+            teacher_page = 1
             teacher_delete()
         elif choice == 4:
-            teacher_login_page()
+            teacher_page = 1
+            teacher_update()
         elif choice == 5:
+            teacher_page = 1
             main_menu()
-        elif choice == 6:
+        elif choice == 0:
             teacher_page = 0
 
-def teacher_reviews():
-    teacher_review_page = 1
-    if teacher_review_page == 1:
+def teacher_reviews(teacher):
+    teacher_review_page = 0
+    if teacher_review_page == 0:
         reviews = session.query(Review)
         create_reviews_table(reviews)
-        # print(table)
         choice = int(input(f'''
                 Please select:
                 1 - Filter By Program
                 2 - See Your Reviews
                 3 - Go Back
-                4 - Quit Program
+                0 - Quit Program
 
                 ENTER: '''))
+        if choice == 1:
+            teacher_review_page = 1
+            chosen_program = str(input("Please Input Program Name: "))
+            review_list = [review for review in reviews if review.program.lower() == chosen_program.lower()] 
+            create_reviews_table(review_list)
+        elif choice == 2:
+            teacher_review_page = 1
+            review_list = [review for review in reviews if review.teacher_id == teacher.id] 
+            create_reviews_table(review_list)
+        elif choice == 3:
+            teacher_review_page = 1
+            teacher_page(teacher)
+        elif choice == 0:
+            teacher_review_page = 0
+
 
 # https://pypi.org/project/prettytable/
 # python -m pip install -U prettytable
 
-def teacher_write_review():
-    pass
+def teacher_write_review(teacher):
+    print('')
+    teacher_review = str(input("Write your Honest Review: "))
+    teacher_rating = float(input("Leave your Honest Rating of the Program (1-5): "))
+
+    review = Review(teacher_id=teacher.id, program=teacher.program, comment=teacher_review, rating=teacher_rating)
+
+    session.add(review)
+    session.commit()
+
+    print('Thank you for Submitting a Review!')
 
 def teacher_delete():
     pass
