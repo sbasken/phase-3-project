@@ -69,5 +69,6 @@ class Review(Base):
             + f"Student_ID:{self.student_id}, " \
             + f"Teacher_ID:{self.teacher_id}, " \
             + f"Program: {self.program}, "\
-            + f"Coment: {self.comment}, "\
-            + f"Email: {self.email} >"
+            + f"Comment: {self.comment}, "\
+            + f"Rating: {self.rating}, "\
+            + f"Date: {self.date.strftime('%Y-%m-%d')} > "
