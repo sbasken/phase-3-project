@@ -66,7 +66,7 @@ if __name__ == '__main__':
                 program = random.choice(programs),
                 comment = random.choice(student_comments),
                 rating = random.randint(1,5),
-                date = faker.date_time().strftime('%Y-%m-%d %H:%M:%S')
+                date = faker.date_time().strftime('%Y-%m-%d')
             )
 
             session.add(review)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
                 program = random.choice(programs),
                 comment = random.choice(teacher_comments),
                 rating = random.randint(1,5),
-                date = faker.date_time().strftime('%Y-%m-%d %H:%M:%S')
+                date = faker.date_time().strftime('%Y-%m-%d')
             )
             session.add(review)
             session.commit()
