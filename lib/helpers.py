@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from prettytable import PrettyTable
-# import re
+import time
 
 engine = create_engine('sqlite:///db/reviews.db')
 Session = sessionmaker(bind=engine)
@@ -36,6 +36,8 @@ def main_menu():
                 Please select which one you are:
                 1 - Student
                 2 - Teacher
+                3 - Create New Student Profile
+                4 - Create New Teacher Profile
                 0 - Quit Program
 
                 ENTER: '''))
@@ -48,6 +50,14 @@ def main_menu():
                 teacher_login_page()
 
             elif identity == 3:
+                page_num = 4
+                create_new_student_profile()
+            
+            elif identity == 4:
+                page_num = 5
+                create_new_teacher_profile()
+
+            elif identity == 0:
                 page_num = 0
             else:
                 print("Invalid selection. Please try again.")
@@ -74,8 +84,7 @@ def student_page(student):
             3 - Edit your Review
             4 - Update your Phone Number or Email
             5 - Delete a Review
-            6 - Create new Profile (coming soon!!)
-            7 - Go Back
+            6 - Go Back
             0 - Quit Program
 
             ENTER: '''))
@@ -83,25 +92,21 @@ def student_page(student):
         student_write_reivew(student)
 
     elif student_menu_choice == 2:
-        print('please work 3')
         view_student_reviews(student)
 
-#     elif student_menu_choice == 3:
-#         print('please work 4')
+    elif student_menu_choice == 3:
+        edit_student_reviews(student)
         
-#     elif student_menu_choice == 4:
-#         print('please work 5')
+    elif student_menu_choice == 4:
+        update_email_or_pn(student)
 
-#     elif student_menu_choice == 5:
-#         print('please work 6')
+    elif student_menu_choice == 5:
+        delete_selected_review(student)
 
-#     elif student_menu_choice == 6:
-#         print('please work 7')
+    elif student_menu_choice == 6:
+        main_menu()
 
-#     elif student_menu_choice == 7:
-#         main_menu()
-
-    elif student_menu_choice == 8:
+    elif student_menu_choice == 0:
         student_page = 0
         
     else:
@@ -120,22 +125,85 @@ def student_write_reivew(student):
     print('Thank you for Submitting a Review!')
     student_page(student)
 
-def view_student_reviews():
-    reviews = session.query(Review).filter_by(student_id=student.id).all()
-    pass
-#     teacher_review_page = 1
-#     if teacher_review_page == 1:
-#         reviews = session.query(Review)
-#         create_reviews_table(reviews)
-#         # print(table)
-#         choice = int(input(f'''
-#                 Please select:
-#                 1 - Filter By Program
-#                 2 - See Your Reviews
-#                 3 - Go Back
-#                 0 - Quit Program
+def view_student_reviews(student):
+    written_student_reviews = session.query(Review).filter_by(student_id=student.id).all()
+    if written_student_reviews:
+        create_reviews_table(written_student_reviews)
+        student_menu = str(input("Finished looking? Would you like to head back to the Main Menu? (Type Y/N): "))
+        if student_menu == "Y":
+            student_page(student)
+        else:
+            create_reviews_table(written_student_reviews)
+            print("Take your Time!")
+    else:
+        print("You have no reviews yet! Write one to show it here!")
+        student_page(student)
 
-#                 ENTER: '''))
+def edit_student_reviews(student):
+    reviews = session.query(Review).filter_by(student_id=student.id).all()
+    if not reviews:
+        print("You have no reviews to edit!")
+        student_page(student)
+    else:
+        create_reviews_table(reviews)
+        review_choice = int(input("Enter the number of the review you want to edit (or 0 to go back): "))
+        if review_choice == 0:
+            student_page(student)
+        elif review_choice > len(reviews):
+            print("Invalid selection. Please try again.")
+            edit_student_reviews(student)
+        else:
+            selected_review = reviews[review_choice - 1]
+            new_comment = input("Enter your new comment: ")
+            new_rating = float(input("Enter your new rating (1-5) "))
+            selected_review.comment = new_comment
+            selected_review.rating = new_rating
+
+            session.commit()
+            print("Review updated successfully!")
+            student_page(student)
+
+def update_email_or_pn(student):
+    current_student = session.query(Student).filter_by(id=student.id).first()
+    info_change_selection = int(input('''
+            Which one would you like to update?
+                1 - Email
+                2 - Phone Number
+            '''))
+    if info_change_selection == 1:
+        email_change = str(input("New Email: "))
+        current_student.email = email_change
+    elif info_change_selection == 2:
+        phone_number_change = int(input("New Phone Number: "))
+        formatted_phone_number = "({}) {} - {}".format(str(phone_number_change)[0:3], str(phone_number_change)[3:6], str(phone_number_change)[6:])
+        current_student.phone_number = formatted_phone_number
+    else:
+        print("Invalid Selection. Please input 1 or 2.")
+    
+    session.commit()
+    print("Information successfully updated!")
+    student_page(student)
+
+def delete_selected_review(student):
+    reviews = session.query(Review).filter_by(student_id=student.id).all()
+    if not reviews:
+        print("You have no reviews to delete!")
+        student_page(student)
+    else:
+        create_reviews_table(reviews)
+        review_choice = int(input("Enter the number of the review you want to delete (or 0 to go back): "))
+        if review_choice == 0:
+            student_page(student)
+        elif review_choice > len(reviews):
+            print("Invalid selection. Please try again.")
+            delete_selected_review(student)
+        else:
+            selected_review = reviews[review_choice - 1]
+            session.delete(selected_review)
+            session.commit()
+            print("Review successfully deleted!")
+            student_page(student)
+
 
 #### FOR BOTH TEACHERS AND STUDENTS:
 def create_reviews_table(reviews):
@@ -336,3 +404,35 @@ def teacher_update():
 
 
     
+# NEW PROFILE CREATION FUNCTIONS:
+
+def create_new_student_profile():
+    name = str(input("Please Enter your Full Name: "))
+    program = str(input("Program you are Currently Enrolled in: "))
+    email = str(input("Please enter your Email: "))
+    phone_number_change = int(input("New Phone Number: "))
+    formatted_phone_number = "({}) {} - {}".format(str(phone_number_change)[0:3], str(phone_number_change)[3:6], str(phone_number_change)[6:])
+    student = Student(name=name, program=program, email=email, phone_number=formatted_phone_number)
+
+    session.add(student)
+    session.commit()
+    print('''
+        Welcome to Reviewer {}!
+        We're really excited for you to join this community!
+
+        As a student you have access to lots of cool features on this app!
+
+        Feel free to look through and if you run into any issues/ questions -
+        don't hesitate to reach out!
+
+        Your password on login is: "password"
+
+        Happy Coding!
+    '''.format(name))
+
+    time.sleep(8)
+
+    main_menu()
+
+def create_new_teacher_profile():
+    pass
