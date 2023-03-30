@@ -83,14 +83,13 @@ def student_page(student):
         student_write_reivew(student)
 
     elif student_menu_choice == 2:
-        print('please work 3')
         view_student_reviews(student)
 
-#     elif student_menu_choice == 3:
-#         print('please work 4')
+    elif student_menu_choice == 3:
+        edit_student_reviews(student)
         
-#     elif student_menu_choice == 4:
-#         print('please work 5')
+    elif student_menu_choice == 4:
+        update_email_or_pn(student)
 
 #     elif student_menu_choice == 5:
 #         print('please work 6')
@@ -112,30 +111,56 @@ def student_write_reivew(student):
     student_review = str(input("Write your Honest Review: "))
     student_rating = float(input("Leave your Honest Rating of the Program (1-5): "))
 
-    review = Review(student_id=student.id, program=student.program, comment=student_review, rating=student_rating)
+    new_student_review = Review(student_id=student.id, program=student.program, comment=student_review, rating=student_rating)
 
-    session.add(review)
+    session.add(new_student_review)
     session.commit()
 
     print('Thank you for Submitting a Review!')
     student_page(student)
 
-def view_student_reviews():
-    reviews = session.query(Review).filter_by(student_id=student.id).all()
-    pass
-#     teacher_review_page = 1
-#     if teacher_review_page == 1:
-#         reviews = session.query(Review)
-#         create_reviews_table(reviews)
-#         # print(table)
-#         choice = int(input(f'''
-#                 Please select:
-#                 1 - Filter By Program
-#                 2 - See Your Reviews
-#                 3 - Go Back
-#                 0 - Quit Program
+def view_student_reviews(student):
+    written_student_reviews = session.query(Review).filter_by(student_id=student.id).all()
+    if written_student_reviews:
+        create_reviews_table(written_student_reviews)
+        student_menu = str(input("Finished looking? Would you like to head back to the Main Menu? (Type Y/N): "))
+        if student_menu == "Y":
+            student_page(student)
+        else:
+            create_reviews_table(written_student_reviews)
+            print("Take your Time!")
+    else:
+        print("You have no reviews yet! Write one to show it here!")
+        student_page(student)
 
-#                 ENTER: '''))
+def edit_student_reviews(student):
+    reviews = session.query(Review).filter_by(student_id=student.id).all()
+    if not reviews:
+        print("You have no reviews to edit!")
+        student_page(student)
+    else:
+        create_reviews_table(reviews)
+        review_choice = int(input("Enter the number of the review you want to edit (or 0 to go back): "))
+        if review_choice == 0:
+            student_page(student)
+        elif review_choice > len(reviews):
+            print("Invalid selection. Please try again.")
+            edit_student_reviews(student)
+        else:
+            selected_review = reviews[review_choice - 1]
+            new_comment = input("Enter your new comment: ")
+            new_rating = float(input("Enter your new rating (1-5) "))
+            selected_review.comment = new_comment
+            selected_review.rating = new_rating
+
+            session.commit()
+            print("Review updated successfully!")
+            student_page(student)
+def update_email_or_pn(student):
+    current_student = session.query(Student).filter_by(id=student.id).first()
+    email_change = str(input("New Email: "))
+    phone_number_change = int(input("New Phone Number: "))
+    pass
 
 #### FOR BOTH TEACHERS AND STUDENTS:
 def create_reviews_table(reviews):
