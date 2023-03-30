@@ -37,18 +37,18 @@ if __name__ == '__main__':
 
     teachers = []
 
-    for student in students:
-        for _ in range(10):
-            teacher = Teacher(
-                name = f"{faker.first_name()} {faker.last_name()}",
-                program = random.choice(programs),
-                email = faker.email()
-            )
+    for _ in range(25):
 
-            session.add(teacher)
-            session.commit()
+        teacher = Teacher(
+            name = f"{faker.first_name()} {faker.last_name()}",
+            program = random.choice(programs),
+            email = faker.email()
+        )
 
-            teachers.append(teacher)
+        session.add(teacher)
+        session.commit()
+
+        teachers.append(teacher)
     
     
     reviews = []
