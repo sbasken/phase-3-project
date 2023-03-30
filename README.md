@@ -56,7 +56,7 @@ Now you should be able to see the populated database files.
 Navigate back to the lib directory:
 ```
    $ cd ..
- 
+   ``` 
   
 Run the program using:
 ```
