@@ -426,11 +426,11 @@ def create_new_teacher_profile():
         We're really excited for you to join this community!
 
         As a teacher you have full access to view all reviews across
-        all programs! We hope that you can see your own reviews
-        and report any/all issues students are running into
-        back to the curriculum team so that this school
-        can run seamlessly and efficiently while also
-        giving students the best possible experience!
+        all programs! We hope that you can regularly read your own 
+        reviews and report any/all issues students are running into
+        back to the curriculum team so that this school can run 
+        seamlessly and efficiently while also giving students the 
+        best possible experience!
 
         Your password on login is: "flatsteel school"
 
