@@ -153,6 +153,9 @@ def create_reviews_table(reviews):
         ])
     print(table)
 
+def delete_review(person):
+    print("Your Review Successfully Deleted!")
+
 # SAKI
 
 # Teachers:
@@ -233,7 +236,7 @@ def teacher_page(teacher):
             teacher_write_review(teacher)
         elif choice == 3:
             teacher_page = 1
-            teacher_delete(teacher)
+            teacher_delete_page(teacher)
         elif choice == 4:
             teacher_page = 1
             teacher_update()
@@ -300,20 +303,32 @@ def teacher_write_review(teacher):
     print('Thank you for Submitting a Review!')
     teacher_page(teacher)
 
-def teacher_delete(teacher):
+def teacher_delete_page(teacher):
     teacher_review_page = 0
     if teacher_review_page == 0:
         reviews = session.query(Review)
         review_list = [ review for review in reviews if review.teacher_id == teacher.id] 
-        create_reviews_table(review_list)
         if len(review_list) == 0:
-            "You Have Not Written a Review Yet!"
-        prompt = str(input("Would You Like to Return to the Main Menu? [ yes / no ]:  "))
-        if prompt in YES:
-            teacher_page(teacher)
-        else: 
-            print("Thanks for Visiting!")
-        
+            print("")
+            print("You Have No Review Yet!")
+            prompt = str(input("Would You Like to Return to the Main Menu? [ yes / no ]:  "))
+            if prompt in YES:
+                teacher_page(teacher)
+            else: 
+                print("Thanks for Visiting!")
+        else:
+            create_reviews_table(review_list)
+            prompt = str(input("Would You Like to Delete Your Review(s)? [ yes / no ]:  "))
+            if prompt in YES:
+                for review in review_list:
+                    prompt = input(f"Delete the Review for Program, {review.program.upper()} with the comment \"{review.comment}\" ? [ yes / no ]: ")
+                    if prompt in YES:
+                        delete_review(teacher)
+                    else:
+                        print("We Won't Delete This Review!")
+            else: 
+                print("Thanks for Visiting!")
+            
     
 
 def teacher_update():
