@@ -8,6 +8,7 @@ sqlalchemy = "*"
 alembic = "*"
 faker = "*"
 ipdb = "*"
+prettytable = "*"
 
 [dev-packages]
 
