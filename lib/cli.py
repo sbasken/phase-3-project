@@ -13,22 +13,4 @@ if __name__ == '__main__':
 
 
 
-
-# log in feature for students / stretch goals
-    # password to access student/ teacher portal:
-
-# main menu: (already made) / stretch goals - individual profile
-    # if student - student log in portal
-    # if teacher - teacher log in portal
-
-# Students:
-    # write a review (CREATE)
-        # identify yourself feature
-    # see their own reviews (using Student.name?) (READ)
-        # table - prettytable
-    # update their information/ review (UPDATE)
-    # delete their review (DELETE)
-    # create profile (CREATE)
-
-
     

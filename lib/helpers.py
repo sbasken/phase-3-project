@@ -130,11 +130,12 @@ def view_student_reviews(student):
     if written_student_reviews:
         create_reviews_table(written_student_reviews)
         student_menu = str(input("Finished looking? Would you like to head back to the Main Menu? (Type Y/N): "))
-        if student_menu == "Y":
+        if student_menu in YES:
             student_page(student)
         else:
             create_reviews_table(written_student_reviews)
             print("Take your Time!")
+            view_student_reviews(student)
     else:
         print("You have no reviews yet! Write one to show it here!")
         student_page(student)
