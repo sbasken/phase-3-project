@@ -221,55 +221,7 @@ def create_reviews_table(reviews):
         ])
     print(table)
 
-def delete_review(person):
-    print("Your Review Successfully Deleted!")
-
 # SAKI
-
-# Teachers:
-    # see all reviews
-        # table 
-        # filter by:
-            # program name + average rating (table)
-            # reviews they have written
-    # write a review
-    # delete their own reviews
-    # update their reviews
-    # ( add student to a program )
-
-# def main_menu():
-#         print('')
-#         print("Hello! Thank you for taking the time to write a review!")
-#         print('')
-#         print('''
-#                  _v_              _v_  
-#                 (o o)            (o o) 
-#                (  V  ) Reviewer (  V  )
-#                --m-m--------------m-m--
-#         ''')
-
-#         page_num = 1
-#         if page_num == 1:
-
-#             identity = int(input(f'''
-#                 Please select which one you are:
-#                 1 - Student
-#                 2 - Teacher
-#                 0 - Quit Program
-
-#                 ENTER: '''))
-#             if identity == 1:
-#                 page_num = 2
-#                 student_login_page()
-
-#             elif identity == 2:
-#                 page_num = 3
-#                 teacher_login_page()
-
-#             elif identity == 3:
-#                 page_num = 0
-#             else:
-#                 print("Invalid selection. Please try again.")
     
 def teacher_login_page():
     teacher_name = str(input("Enter Your Name:  "))
@@ -307,7 +259,7 @@ def teacher_page(teacher):
             teacher_delete_page(teacher)
         elif choice == 4:
             teacher_page = 1
-            teacher_update()
+            teacher_update_review(teacher)
         elif choice == 5:
             teacher_page = 1
             main_menu()
@@ -388,19 +340,46 @@ def teacher_delete_page(teacher):
             create_reviews_table(review_list)
             prompt = str(input("Would You Like to Delete Your Review(s)? [ yes / no ]:  "))
             if prompt in YES:
-                for review in review_list:
-                    prompt = input(f"Delete the Review for Program, {review.program.upper()} with the comment \"{review.comment}\" ? [ yes / no ]: ")
-                    if prompt in YES:
-                        delete_review(teacher)
-                    else:
-                        print("We Won't Delete This Review!")
+                review_choice = int(input("Enter the number of the review you want to delete (or 0 to go back): "))
+                if review_choice == 0:
+                    teacher_page(teacher)
+                elif review_choice > len(reviews):
+                    print("Invalid selection. Please try again.")
+                    teacher_delete_page(teacher)
+                else:
+                    selected_review = reviews[review_choice - 1]
+                    session.delete(selected_review)
+                    session.commit()
+                    print("Review successfully deleted!")
+                    teacher_page(teacher)
             else: 
                 print("Thanks for Visiting!")
             
     
 
-def teacher_update():
-    pass
+def teacher_update_review(teacher):
+    reviews = session.query(Review).filter_by(teacher_id=teacher.id).all()
+    if not reviews:
+        print("You have no reviews to edit!")
+        teacher_page(teacher)
+    else:
+        create_reviews_table(reviews)
+        review_choice = int(input("Enter the number of the review you want to edit (or 0 to go back): "))
+        if review_choice == 0:
+            teacher_page(teacher)
+        elif review_choice > len(reviews):
+            print("Oops! This is an invalid selection. Please try again.")
+            teacher_update_review(teacher)
+        else:
+            selected_review = reviews[review_choice - 1]
+            new_comment = input("Enter your new comment: ")
+            new_rating = float(input("Enter your new rating (1-5): "))
+            selected_review.comment = new_comment
+            selected_review.rating = new_rating
+
+            session.commit()
+            print("Review updated successfully!")
+            teacher_page(teacher)
 
 
     
@@ -430,9 +409,35 @@ def create_new_student_profile():
         Happy Coding!
     '''.format(name))
 
-    time.sleep(8)
+    time.sleep(10)
 
     main_menu()
 
 def create_new_teacher_profile():
-    pass
+    name = str(input("Please Enter your Full Name: "))
+    program = str(input("Program you are Currently Enrolled in: "))
+    email = str(input("Please enter your Email: "))
+    teacher = Teacher(name=name, program=program, email=email)
+
+    session.add(teacher)
+    session.commit()
+    print('''
+        Welcome {}!
+        We're really excited for you to join this community!
+
+        As a teacher you have full access to view all reviews across
+        all programs! We hope that you can see your own reviews
+        and report any/all issues students are running into
+        back to the curriculum team so that this school
+        can run seamlessly and efficiently while also
+        giving students the best possible experience!
+
+        Your password on login is: "flatsteel school"
+
+        Happy Coding! and Please don't hesitate to reach out if
+        there's anything we can support you with!
+    '''.format(name))
+
+    time.sleep(10)
+
+    main_menu()

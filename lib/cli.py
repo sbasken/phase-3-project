@@ -31,16 +31,4 @@ if __name__ == '__main__':
     # create profile (CREATE)
 
 
-
-
-# SAKI
-
-
-
-
-
-
-
-# HENRY
-
     
