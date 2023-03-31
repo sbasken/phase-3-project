@@ -1,4 +1,4 @@
-### REVIEWER APP
+# REVIEWER APP
 
 ## Description
 
@@ -68,3 +68,7 @@ Have fun! Make sure to leave a review! 🐣 🥳
 ## WIREFRAME
 
 ![alt text](https://cdn.discordapp.com/attachments/1070016828484636722/1090006999581872228/Screenshot_2023-03-27_at_1.18.11_PM.png)
+
+## Contributors:
+[![](https://github.com/henryyun1996.png?size=50)](https://github.com/henryyun1996)
+[![](https://github.com/sbasken.png?size=50)](https://github.com/sbasken)
