@@ -56,6 +56,8 @@ def main_menu():
                     create_new_teacher_profile()
 
                 elif identity == 0:
+                    print("Bye! Thanks for visiting! Hope to see you again soon!")
+                    time.sleep(1)
                     page_num = 0
                 else:
                     print("Invalid selection. Please try again.")
@@ -92,32 +94,32 @@ def student_page(student):
 
                 ENTER: '''))
         if student_menu_choice == 1:
-            print("navigating to desired page")
+            print("navigating to desired page...")
             time.sleep(1)
             student_write_reivew(student)
 
         elif student_menu_choice == 2:
-            print("navigating to desired page")
+            print("navigating to desired page...")
             time.sleep(1)
             view_student_reviews(student)
 
         elif student_menu_choice == 3:
-            print("navigating to desired page")
+            print("navigating to desired page...")
             time.sleep(1)
             edit_student_reviews(student)
             
         elif student_menu_choice == 4:
-            print("navigating to desired page")
+            print("navigating to desired page...")
             time.sleep(1)
             update_email_or_pn(student)
 
         elif student_menu_choice == 5:
-            print("navigating to desired page")
+            print("navigating to desired page...")
             time.sleep(1)
             delete_selected_review(student)
 
         elif student_menu_choice == 6:
-            print("navigating to desired page")
+            print("navigating to desired page...")
             time.sleep(1)
             main_menu()
 
@@ -135,10 +137,12 @@ def student_page(student):
 
 def student_write_reivew(student):
     print('''
+
  ^ ^                                 
 (O,O)                                
 (   ) Thank you for taking the time to leave feedback!    
 -"-"---------------------------------------------------
+
 ''')
     student_review = str(input("Write your Honest Review: "))
     student_rating = float(input("Leave your Honest Rating of the Program (1-5): "))
@@ -156,7 +160,10 @@ def student_write_reivew(student):
 def view_student_reviews(student):
     written_student_reviews = session.query(Review).filter_by(student_id=student.id).all()
     if written_student_reviews:
+        print('')
+        print('')
         create_reviews_table(written_student_reviews)
+        print('')
         student_menu = str(input("Finished looking? Would you like to head back to the Main Menu? (Type Y/N): "))
         if student_menu in YES:
             student_page(student)
@@ -177,7 +184,10 @@ def edit_student_reviews(student):
         print("You have no reviews to edit!")
         student_page(student)
     else:
+        print('')
+        print('')
         create_reviews_table(reviews)
+        print('')
         review_choice = int(input("Enter the number of the review you want to edit (or 0 to go back): "))
         if review_choice == 0:
             student_page(student)
@@ -203,6 +213,7 @@ def update_email_or_pn(student):
                     1 - Email
                     2 - Phone Number
                     3 - Go Back
+
                 ENTER: '''))
         if info_change_selection == 1:
             email_change = str(input("New Email: "))
@@ -225,6 +236,7 @@ def update_email_or_pn(student):
 
         elif info_change_selection == 3:
             student_page(student)
+            print('')
         else:
             print("Invalid Selection. Please input 1 or 2.")
 
