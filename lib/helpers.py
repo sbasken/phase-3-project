@@ -188,7 +188,13 @@ def edit_student_reviews(student):
         print('')
         create_reviews_table(reviews)
         print('')
-        review_choice = int(input("Enter the number of the review you want to edit (or 0 to go back): "))
+        review_choice = int(input('''
+
+Enter the number of the review you want to edit (or 0 to go back) 
+(The top review is 1 and the next one is 2 and so on...)
+
+ENTER: 
+        '''))
         if review_choice == 0:
             student_page(student)
         elif review_choice > len(reviews):
@@ -337,57 +343,61 @@ def teacher_page(teacher):
             teacher_nav_page = 0
     except ValueError:
         print("Invalid selection. Please input one of the options presented above.")
-        time.sleep(2)
+        time.sleep(1)
         teacher_page(teacher)
 
 def teacher_reviews(teacher):
     teacher_review_page = 0
-    if teacher_review_page == 0:
-        reviews = session.query(Review)
-        create_reviews_table(reviews)
-        choice = int(input(f'''
+    try:
+        if teacher_review_page == 0:
+            reviews = session.query(Review)
+            create_reviews_table(reviews)
+            choice = int(input(f'''
 
-                Please select:
-                1 - Filter By Program
-                2 - See Your Reviews
-                3 - Go Back
-                0 - Quit Program
+                    Please select:
+                    1 - Filter By Program
+                    2 - See Your Reviews
+                    3 - Go Back
+                    0 - Quit Program
 
-                ENTER: '''))
-        
-        if choice == 1:
-            teacher_review_page = 1
-            chosen_program = str(input("Please Input Program Name: "))
-            review_list = [review for review in reviews if review.program.lower() == chosen_program.lower()] 
-            create_reviews_table(review_list)
-            prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
-            if prompt in YES:
-                teacher_reviews(teacher)
-            else: 
-                print("Thanks for Visiting!")
-        elif choice == 2:
-            teacher_review_page = 1
-            review_list = [review for review in reviews if review.teacher_id == teacher.id] 
-            if len(review_list) == 0:
-                print("You Have no Review Yet!")
-                prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
-                if prompt in YES:
-                    teacher_reviews(teacher)
-                else: 
-                    print("Thanks for Visiting!")
-            else:
+                    ENTER: '''))
+            
+            if choice == 1:
+                teacher_review_page = 1
+                chosen_program = str(input("Please Input Program Name: "))
+                review_list = [review for review in reviews if review.program.lower() == chosen_program.lower()] 
                 create_reviews_table(review_list)
                 prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
                 if prompt in YES:
                     teacher_reviews(teacher)
                 else: 
                     print("Thanks for Visiting!")
-        elif choice == 3:
-            teacher_review_page = 1
-            teacher_page(teacher)
-        elif choice == 0:
-            teacher_review_page = 0
-
+            elif choice == 2:
+                teacher_review_page = 1
+                review_list = [review for review in reviews if review.teacher_id == teacher.id] 
+                if len(review_list) == 0:
+                    print("You Have no Review Yet!")
+                    prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
+                    if prompt in YES:
+                        teacher_reviews(teacher)
+                    else: 
+                        print("Thanks for Visiting!")
+                else:
+                    create_reviews_table(review_list)
+                    prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
+                    if prompt in YES:
+                        teacher_reviews(teacher)
+                    else: 
+                        print("Thanks for Visiting!")
+            elif choice == 3:
+                teacher_review_page = 1
+                teacher_page(teacher)
+            elif choice == 0:
+                teacher_review_page = 0
+    except ValueError:
+        print("Invalid selection. Please input one of the options presented above.")
+        time.sleep(1)
+        teacher_reviews(teacher)
 
 def teacher_write_review(teacher):
     print('''
