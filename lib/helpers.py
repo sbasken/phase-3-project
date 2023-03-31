@@ -193,8 +193,7 @@ def edit_student_reviews(student):
 Enter the number of the review you want to edit (or 0 to go back) 
 (The top review is 1 and the next one is 2 and so on...)
 
-ENTER: 
-        '''))
+ENTER: '''))
         if review_choice == 0:
             student_page(student)
         elif review_choice > len(reviews):
@@ -270,8 +269,7 @@ def delete_selected_review(student):
 Enter the number of the review you want to delete (or 0 to go back) 
 (The top review is 1 and the next one is 2 and so on...)
 
-ENTER: 
-        '''))
+ENTER: '''))
         if review_choice == 0:
             student_page(student)
         elif review_choice > len(reviews):
@@ -450,8 +448,7 @@ def teacher_delete_page(teacher):
 Enter the number of the review you want to delete (or 0 to go back) 
 (The top review is 1 and the next one is 2 and so on...)
 
-ENTER: 
-        '''))
+ENTER: '''))
                 if review_choice == 0:
                     teacher_page(teacher)
                 elif review_choice > len(review_list):
@@ -489,8 +486,7 @@ def teacher_update_review(teacher):
 Enter the number of the review you want to edit (or 0 to go back) 
 (The top review is 1 and the next one is 2 and so on...)
 
-ENTER: 
-        '''))
+ENTER: '''))
         if review_choice == 0:
             teacher_page(teacher)
         elif review_choice > len(reviews):
