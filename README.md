@@ -40,18 +40,20 @@ Navigate to the db directory:
   $ cd lib/db
   ```
 
-To create the review.db file and navigate the SQLite tables in your code editor, enter:
-```
-  $ alembic upgrade head
-  ```  
-
-Next, run:
-```
-  $ python db/seed.py
-  ```
-
 You can then open 'review.db' with SQLITE.
 Now you should be able to see the populated database files.
+
+If it doesn't work, try:
+
+      To create the review.db file and navigate the SQLite tables in your code editor, enter:
+      ```
+        $ alembic upgrade head
+        ```  
+
+      Next, run:
+      ```
+        $ python db/seed.py
+        ```
 
 Navigate back to the lib directory:
 ```
@@ -62,6 +64,9 @@ Run the program using:
 ```
   $ python cli.py
   ```
+ 
+Password for students: `password`
+password for teachers: `flatsteel school`
 
 Have fun! Make sure to leave a review! 🐣 🥳
 
@@ -70,5 +75,6 @@ Have fun! Make sure to leave a review! 🐣 🥳
 ![alt text](https://cdn.discordapp.com/attachments/1070016828484636722/1090006999581872228/Screenshot_2023-03-27_at_1.18.11_PM.png)
 
 ## Contributors:
-[![](https://github.com/henryyun1996.png?size=50)](https://github.com/henryyun1996)
-[![](https://github.com/sbasken.png?size=50)](https://github.com/sbasken)
+[Henry](https://github.com/henryyun1996)
+[Saki](https://github.com/sbasken)
+
