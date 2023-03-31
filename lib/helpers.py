@@ -360,21 +360,26 @@ def teacher_reviews(teacher):
         elif choice == 2:
             teacher_review_page = 1
             review_list = [review for review in reviews if review.teacher_id == teacher.id] 
-            create_reviews_table(review_list)
-            prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
-            if prompt in YES:
-                teacher_reviews(teacher)
-            else: 
-                print("Thanks for Visiting!")
+            if len(review_list) == 0:
+                print("You Have no Review Yet!")
+                prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
+                if prompt in YES:
+                    teacher_reviews(teacher)
+                else: 
+                    print("Thanks for Visiting!")
+            else:
+                create_reviews_table(review_list)
+                prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
+                if prompt in YES:
+                    teacher_reviews(teacher)
+                else: 
+                    print("Thanks for Visiting!")
         elif choice == 3:
             teacher_review_page = 1
             teacher_page(teacher)
         elif choice == 0:
             teacher_review_page = 0
 
-
-# https://pypi.org/project/prettytable/
-# python -m pip install -U prettytable
 
 def teacher_write_review(teacher):
     print('')
@@ -394,14 +399,18 @@ def teacher_delete_page(teacher):
     if teacher_review_page == 0:
         reviews = session.query(Review)
         review_list = [ review for review in reviews if review.teacher_id == teacher.id] 
-        if len(review_list) == 0:
+        if not review_list:
             print("")
-            print("You Have No Review Yet!")
+            print("You Have No Review To Delete")
             prompt = str(input("Would You Like to Return to the Main Menu? [ yes / no ]:  "))
             if prompt in YES:
                 teacher_page(teacher)
-            else: 
+            elif prompt in NO:
                 print("Thanks for Visiting!")
+            else: 
+                print("Invalid Input - Please Try Again!")
+                time.sleep(1)
+                teacher_delete_page(teacher)
         else:
             create_reviews_table(review_list)
             prompt = str(input("Would You Like to Delete Your Review(s)? [ yes / no ]:  "))
@@ -409,17 +418,21 @@ def teacher_delete_page(teacher):
                 review_choice = int(input("Enter the number of the review you want to delete (or 0 to go back): "))
                 if review_choice == 0:
                     teacher_page(teacher)
-                elif review_choice > len(reviews):
+                elif review_choice > len(review_list):
                     print("Invalid selection. Please try again.")
+                    time.sleep(1)
                     teacher_delete_page(teacher)
                 else:
-                    selected_review = reviews[review_choice - 1]
+                    selected_review = review_list[review_choice - 1]
                     session.delete(selected_review)
                     session.commit()
                     print("Review successfully deleted!")
+                    time.sleep(1)
                     teacher_page(teacher)
-            else: 
+            elif prompt in NO:
                 print("Thanks for Visiting!")
+            else: 
+                print("Invalid Input - Please Try Again!")
             
     
 
@@ -427,6 +440,7 @@ def teacher_update_review(teacher):
     reviews = session.query(Review).filter_by(teacher_id=teacher.id).all()
     if not reviews:
         print("You have no reviews to edit!")
+        time.sleep(1)
         teacher_page(teacher)
     else:
         create_reviews_table(reviews)
@@ -435,6 +449,7 @@ def teacher_update_review(teacher):
             teacher_page(teacher)
         elif review_choice > len(reviews):
             print("Oops! This is an invalid selection. Please try again.")
+            time.sleep(1)
             teacher_update_review(teacher)
         else:
             selected_review = reviews[review_choice - 1]
@@ -445,6 +460,7 @@ def teacher_update_review(teacher):
 
             session.commit()
             print("Review updated successfully!")
+            time.sleep(1)
             teacher_page(teacher)
 
 
