@@ -20,9 +20,10 @@ NO = ['N', 'n','no']
 
 def main_menu():
         print('')
-        print("Hello! Welcome to *Reviewer*")
         print('')
         print('''
+              Hello! Welcome to Reviewer!
+
                  _v_              _v_  
                 (o o)            (o o) 
                (  V  ) Reviewer (  V  )
@@ -30,9 +31,10 @@ def main_menu():
         ''')
 
         page_num = 1
-        if page_num == 1:
+        try:
+            if page_num == 1:
 
-            identity = int(input(f'''
+                identity = int(input(f'''
                 Please select which one you are:
                 1 - Student
                 2 - Teacher
@@ -41,26 +43,30 @@ def main_menu():
                 0 - Quit Program
 
                 ENTER: '''))
-            if identity == 1:
-                page_num = 2
-                student_login_page()
+                if identity == 1:
+                    page_num = 2
+                    student_login_page()
 
-            elif identity == 2:
-                page_num = 3
-                teacher_login_page()
+                elif identity == 2:
+                    page_num = 3
+                    teacher_login_page()
 
-            elif identity == 3:
-                page_num = 4
-                create_new_student_profile()
-            
-            elif identity == 4:
-                page_num = 5
-                create_new_teacher_profile()
+                elif identity == 3:
+                    page_num = 4
+                    create_new_student_profile()
+                
+                elif identity == 4:
+                    page_num = 5
+                    create_new_teacher_profile()
 
-            elif identity == 0:
-                page_num = 0
-            else:
-                print("Invalid selection. Please try again.")
+                elif identity == 0:
+                    page_num = 0
+                else:
+                    print("Invalid selection. Please try again.")
+        except ValueError:
+            print("Invalid selection. Please input one of the options presented above.")
+            time.sleep(2)
+            main_menu()
 
 def student_login_page():
     page_num = 2
@@ -75,45 +81,69 @@ def student_login_page():
 
 def student_page(student):
     page_num = 3
-    student_menu_choice = int(input(f'''
-            Hi {student.name}!
+    try:
+        student_menu_choice = int(input(f'''
+                Hi {student.name}!
+                
+                Please select:
+                1 - Write a Review
+                2 - See Reviews you have Written
+                3 - Edit your Review
+                4 - Update your Phone Number or Email
+                5 - Delete a Review
+                6 - Go Back
+                0 - Quit Program
+
+                ENTER: '''))
+        if student_menu_choice == 1:
+            print("navigating to desired page")
+            time.sleep(1)
+            student_write_reivew(student)
+
+        elif student_menu_choice == 2:
+            print("navigating to desired page")
+            time.sleep(1)
+            view_student_reviews(student)
+
+        elif student_menu_choice == 3:
+            print("navigating to desired page")
+            time.sleep(1)
+            edit_student_reviews(student)
             
-            Please select:
-            1 - Write a Review
-            2 - See Reviews you have Written
-            3 - Edit your Review
-            4 - Update your Phone Number or Email
-            5 - Delete a Review
-            6 - Go Back
-            0 - Quit Program
+        elif student_menu_choice == 4:
+            print("navigating to desired page")
+            time.sleep(1)
+            update_email_or_pn(student)
 
-            ENTER: '''))
-    if student_menu_choice == 1:
-        student_write_reivew(student)
+        elif student_menu_choice == 5:
+            print("navigating to desired page")
+            time.sleep(1)
+            delete_selected_review(student)
 
-    elif student_menu_choice == 2:
-        view_student_reviews(student)
+        elif student_menu_choice == 6:
+            print("navigating to desired page")
+            time.sleep(1)
+            main_menu()
 
-    elif student_menu_choice == 3:
-        edit_student_reviews(student)
-        
-    elif student_menu_choice == 4:
-        update_email_or_pn(student)
-
-    elif student_menu_choice == 5:
-        delete_selected_review(student)
-
-    elif student_menu_choice == 6:
-        main_menu()
-
-    elif student_menu_choice == 0:
-        student_page = 0
-        
-    else:
-        print("Invalid selection. Please try again.")
+        elif student_menu_choice == 0:
+            print("Bye! Thanks for visiting! Hope to see you again soon!")
+            time.sleep(1)
+            page_num = 0
+            
+        else:
+            print("Invalid selection. Please try again.")
+    except ValueError:
+        print("Invalid selection. Please input one of the options presented above.")
+        time.sleep(2)
+        student_page(student)
 
 def student_write_reivew(student):
-    print('')
+    print('''
+ ^ ^                                 
+(O,O)                                
+(   ) Thank you for taking the time to leave feedback!    
+-"-"---------------------------------------------------
+''')
     student_review = str(input("Write your Honest Review: "))
     student_rating = float(input("Leave your Honest Rating of the Program (1-5): "))
 
@@ -132,12 +162,15 @@ def view_student_reviews(student):
         student_menu = str(input("Finished looking? Would you like to head back to the Main Menu? (Type Y/N): "))
         if student_menu in YES:
             student_page(student)
-        else:
-            create_reviews_table(written_student_reviews)
+        elif student_menu in NO:
             print("Take your Time!")
+        else:
+            print("Please input YES or NO.")
+            time.sleep(2)
             view_student_reviews(student)
     else:
         print("You have no reviews yet! Write one to show it here!")
+        time.sleep(1)
         student_page(student)
 
 def edit_student_reviews(student):
@@ -166,29 +199,53 @@ def edit_student_reviews(student):
 
 def update_email_or_pn(student):
     current_student = session.query(Student).filter_by(id=student.id).first()
-    info_change_selection = int(input('''
-            Which one would you like to update?
-                1 - Email
-                2 - Phone Number
-            '''))
-    if info_change_selection == 1:
-        email_change = str(input("New Email: "))
-        current_student.email = email_change
-    elif info_change_selection == 2:
-        phone_number_change = int(input("New Phone Number: "))
-        formatted_phone_number = "({}) {} - {}".format(str(phone_number_change)[0:3], str(phone_number_change)[3:6], str(phone_number_change)[6:])
-        current_student.phone_number = formatted_phone_number
-    else:
-        print("Invalid Selection. Please input 1 or 2.")
+    try:
+        info_change_selection = int(input('''
+                Which one would you like to update?
+                    1 - Email
+                    2 - Phone Number
+                    3 - Go Back
+                ENTER: '''))
+        if info_change_selection == 1:
+            email_change = str(input("New Email: "))
+            current_student.email = email_change
+
+            session.commit()
+            print("Information successfully updated!")
+            time.sleep(1)
+            student_page(student)
+
+        elif info_change_selection == 2:
+            phone_number_change = int(input("New Phone Number: "))
+            formatted_phone_number = "({}) {} - {}".format(str(phone_number_change)[0:3], str(phone_number_change)[3:6], str(phone_number_change)[6:])
+            current_student.phone_number = formatted_phone_number
+
+            session.commit()
+            print("Information successfully updated!")
+            time.sleep(1)
+            student_page(student)
+
+        elif info_change_selection == 3:
+            student_page(student)
+        else:
+            print("Invalid Selection. Please input 1 or 2.")
+
+        # session.commit()
+        # print("Information successfully updated!")
+    except ValueError:
+        print("Invalid selection. Please input one of the options presented above.")
+        time.sleep(2)
+        update_email_or_pn(student)
     
-    session.commit()
-    print("Information successfully updated!")
-    student_page(student)
+    # session.commit()
+    # print("Information successfully updated!")
+    # student_page(student)
 
 def delete_selected_review(student):
     reviews = session.query(Review).filter_by(student_id=student.id).all()
     if not reviews:
         print("You have no reviews to delete!")
+        time.sleep(1)
         student_page(student)
     else:
         create_reviews_table(reviews)
@@ -197,12 +254,14 @@ def delete_selected_review(student):
             student_page(student)
         elif review_choice > len(reviews):
             print("Invalid selection. Please try again.")
+            time.sleep(1)
             delete_selected_review(student)
         else:
             selected_review = reviews[review_choice - 1]
             session.delete(selected_review)
             session.commit()
             print("Review successfully deleted!")
+            time.sleep(1)
             student_page(student)
 
 
@@ -235,8 +294,8 @@ def teacher_login_page():
         teacher_login_page()
 
 def teacher_page(teacher):
-    teacher_page = 0
-    if teacher_page == 0:
+    teacher_nav_page = 1
+    try:
         choice = int(input(f'''
                 Hi {teacher.name}!
 
@@ -250,22 +309,26 @@ def teacher_page(teacher):
 
                 ENTER: '''))
         if choice == 1:
-            teacher_page = 1
+            teacher_nav_page = 2
             teacher_reviews(teacher)
         elif choice == 2:
-            teacher_page = 1
+            teacher_nav_page = 3
             teacher_write_review(teacher)
         elif choice == 3:
-            teacher_page = 1
+            teacher_nav_page = 4
             teacher_delete_page(teacher)
         elif choice == 4:
-            teacher_page = 1
+            teacher_nav_page = 5
             teacher_update_review(teacher)
         elif choice == 5:
-            teacher_page = 1
+            teacher_nav_page = 6
             main_menu()
         elif choice == 0:
-            teacher_page = 0
+            teacher_nav_page = 0
+    except ValueError:
+        print("Invalid selection. Please input one of the options presented above.")
+        time.sleep(2)
+        teacher_page(teacher)
 
 def teacher_reviews(teacher):
     teacher_review_page = 0
@@ -410,6 +473,7 @@ def create_new_student_profile():
         Happy Coding!
     '''.format(name))
 
+    print("Please wait as we are creating your profile!")
     time.sleep(10)
 
     main_menu()
@@ -439,6 +503,7 @@ def create_new_teacher_profile():
         there's anything we can support you with!
     '''.format(name))
 
+    print("Please wait as we are creating your profile!")
     time.sleep(10)
 
     main_menu()
