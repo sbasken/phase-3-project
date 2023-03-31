@@ -152,7 +152,9 @@ def student_write_reivew(student):
     session.add(review)
     session.commit()
 
-    print('Thank you for Submitting a Review!')
+    print('''
+    Thank you for Submitting a Review!
+    ''')
     student_page(student)
 
 def view_student_reviews(student):
