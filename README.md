@@ -43,7 +43,7 @@ Navigate to the db directory:
 You can then open 'review.db' with SQLITE.
 Now you should be able to see the populated database files.
 
-** If it doesn't work, try one of them or both: **
+** If it doesn't work, try one of these or both: **
 
 To create the review.db file and navigate the SQLite tables in your code editor, enter:
 ```
