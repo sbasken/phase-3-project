@@ -380,7 +380,9 @@ def teacher_reviews(teacher):
                 teacher_review_page = 1
                 review_list = [review for review in reviews if review.teacher_id == teacher.id] 
                 if len(review_list) == 0:
+                    print("")
                     print("You Have no Review Yet!")
+                    print("")
                     prompt = str(input("Would you Like to See More? [ yes / no ]:  "))
                     if prompt in YES:
                         teacher_reviews(teacher)
@@ -430,6 +432,7 @@ def teacher_delete_page(teacher):
         if not review_list:
             print("")
             print("You Have No Review To Delete")
+            print("")
             prompt = str(input("Would You Like to Return to the Main Menu? [ yes / no ]:  "))
             if prompt in YES:
                 teacher_page(teacher)
@@ -517,7 +520,7 @@ def create_new_student_profile():
     email = str(input("Please enter your Email: "))
     phone_number_change = int(input("New Phone Number: "))
     formatted_phone_number = "({}) {} - {}".format(str(phone_number_change)[0:3], str(phone_number_change)[3:6], str(phone_number_change)[6:])
-    student = Student(name=name, program=program, email=email, phone_number=formatted_phone_number)
+    student = Student(name=name.title(), program=program, email=email, phone_number=formatted_phone_number)
 
     session.add(student)
     session.commit()
@@ -544,7 +547,7 @@ def create_new_teacher_profile():
     name = str(input("Please Enter your Full Name: "))
     program = str(input("Program you are Currently Enrolled in: "))
     email = str(input("Please enter your Email: "))
-    teacher = Teacher(name=name, program=program, email=email)
+    teacher = Teacher(name=name.title(), program=program, email=email)
 
     session.add(teacher)
     session.commit()
