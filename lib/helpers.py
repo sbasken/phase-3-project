@@ -265,7 +265,13 @@ def delete_selected_review(student):
         student_page(student)
     else:
         create_reviews_table(reviews)
-        review_choice = int(input("Enter the number of the review you want to delete (or 0 to go back): "))
+        review_choice = int(input('''
+
+Enter the number of the review you want to delete (or 0 to go back) 
+(The top review is 1 and the next one is 2 and so on...)
+
+ENTER: 
+        '''))
         if review_choice == 0:
             student_page(student)
         elif review_choice > len(reviews):
@@ -439,7 +445,13 @@ def teacher_delete_page(teacher):
             create_reviews_table(review_list)
             prompt = str(input("Would You Like to Delete Your Review(s)? [ yes / no ]:  "))
             if prompt in YES:
-                review_choice = int(input("Enter the number of the review you want to delete (or 0 to go back): "))
+                review_choice = int(input('''
+
+Enter the number of the review you want to delete (or 0 to go back) 
+(The top review is 1 and the next one is 2 and so on...)
+
+ENTER: 
+        '''))
                 if review_choice == 0:
                     teacher_page(teacher)
                 elif review_choice > len(review_list):
@@ -472,7 +484,13 @@ def teacher_update_review(teacher):
         teacher_page(teacher)
     else:
         create_reviews_table(reviews)
-        review_choice = int(input("Enter the number of the review you want to edit (or 0 to go back): "))
+        review_choice = int(input('''
+
+Enter the number of the review you want to edit (or 0 to go back) 
+(The top review is 1 and the next one is 2 and so on...)
+
+ENTER: 
+        '''))
         if review_choice == 0:
             teacher_page(teacher)
         elif review_choice > len(reviews):
