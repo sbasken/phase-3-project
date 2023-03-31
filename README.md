@@ -74,7 +74,3 @@ Have fun! Make sure to leave a review! 🐣 🥳
 
 ![alt text](https://cdn.discordapp.com/attachments/1070016828484636722/1090006999581872228/Screenshot_2023-03-27_at_1.18.11_PM.png)
 
-## Contributors:
-[Henry](https://github.com/henryyun1996)
-[Saki](https://github.com/sbasken)
-
