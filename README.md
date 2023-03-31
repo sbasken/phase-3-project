@@ -43,17 +43,18 @@ Navigate to the db directory:
 You can then open 'review.db' with SQLITE.
 Now you should be able to see the populated database files.
 
-If it doesn't work, try:
+** If it doesn't work, try one of them or both: **
 
-  To create the review.db file and navigate the SQLite tables in your code editor, enter:
-    ```
-    $ alembic upgrade head
-    ```  
+To create the review.db file and navigate the SQLite tables in your code editor, enter:
+```
+  $ alembic upgrade head
+  ```  
 
-  Next, run:
+Next, run:
+```
+  $ python db/seed.py
   ```
-    $ python db/seed.py
-   ```
+
 
 Navigate back to the lib directory:
 ```
