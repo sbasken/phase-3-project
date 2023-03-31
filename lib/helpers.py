@@ -31,36 +31,40 @@ def main_menu():
 
         page_num = 1
         if page_num == 1:
+            try:
+                identity = int(input(f'''
+                    Please select which one you are:
+                    1 - Student
+                    2 - Teacher
+                    3 - Create New Student Profile
+                    4 - Create New Teacher Profile
+                    0 - Quit Program
 
-            identity = int(input(f'''
-                Please select which one you are:
-                1 - Student
-                2 - Teacher
-                3 - Create New Student Profile
-                4 - Create New Teacher Profile
-                0 - Quit Program
+                    ENTER: '''))
+                if identity == 1:
+                    page_num = 2
+                    student_login_page()
 
-                ENTER: '''))
-            if identity == 1:
-                page_num = 2
-                student_login_page()
+                elif identity == 2:
+                    page_num = 3
+                    teacher_login_page()
 
-            elif identity == 2:
-                page_num = 3
-                teacher_login_page()
+                elif identity == 3:
+                    page_num = 4
+                    create_new_student_profile()
+                
+                elif identity == 4:
+                    page_num = 5
+                    create_new_teacher_profile()
 
-            elif identity == 3:
-                page_num = 4
-                create_new_student_profile()
-            
-            elif identity == 4:
-                page_num = 5
-                create_new_teacher_profile()
-
-            elif identity == 0:
-                page_num = 0
-            else:
-                print("Invalid selection. Please try again.")
+                elif identity == 0:
+                    page_num = 0
+                else:
+                    print("Invalid selection. Please try again.")
+            except ValueError:
+                print("Invalid selection. Please use an option that is available.")
+                time.sleep(2)
+                main_menu()
 
 def student_login_page():
     page_num = 2
@@ -75,42 +79,47 @@ def student_login_page():
 
 def student_page(student):
     page_num = 3
-    student_menu_choice = int(input(f'''
-            Hi {student.name}!
+    try:
+        student_menu_choice = int(input(f'''
+                Hi {student.name}!
+                
+                Please select:
+                1 - Write a Review
+                2 - See Reviews you have Written
+                3 - Edit your Review
+                4 - Update your Phone Number or Email
+                5 - Delete a Review
+                6 - Go Back
+                0 - Quit Program
+
+                ENTER: '''))
+        if student_menu_choice == 1:
+            student_write_reivew(student)
+
+        elif student_menu_choice == 2:
+            view_student_reviews(student)
+
+        elif student_menu_choice == 3:
+            edit_student_reviews(student)
             
-            Please select:
-            1 - Write a Review
-            2 - See Reviews you have Written
-            3 - Edit your Review
-            4 - Update your Phone Number or Email
-            5 - Delete a Review
-            6 - Go Back
-            0 - Quit Program
+        elif student_menu_choice == 4:
+            update_email_or_pn(student)
 
-            ENTER: '''))
-    if student_menu_choice == 1:
-        student_write_reivew(student)
+        elif student_menu_choice == 5:
+            delete_selected_review(student)
 
-    elif student_menu_choice == 2:
-        view_student_reviews(student)
+        elif student_menu_choice == 6:
+            main_menu()
 
-    elif student_menu_choice == 3:
-        edit_student_reviews(student)
-        
-    elif student_menu_choice == 4:
-        update_email_or_pn(student)
-
-    elif student_menu_choice == 5:
-        delete_selected_review(student)
-
-    elif student_menu_choice == 6:
-        main_menu()
-
-    elif student_menu_choice == 0:
-        student_page = 0
-        
-    else:
-        print("Invalid selection. Please try again.")
+        elif student_menu_choice == 0:
+            page_num = 0
+            
+        else:
+            print("Invalid selection. Please try again.")
+    except ValueError:
+        print("Invalid selection. Please use an option that is available.")
+        time.sleep(2)
+        student_page(student)
 
 def student_write_reivew(student):
     print('')
@@ -235,36 +244,41 @@ def teacher_login_page():
 
 def teacher_page(teacher):
     teacher_page = 0
-    if teacher_page == 0:
-        choice = int(input(f'''
-                Hi {teacher.name}!
+    try:
+        if teacher_page == 0:
+            choice = int(input(f'''
+                    Hi {teacher.name}!
 
-                Please select:
-                1 - See Reviews
-                2 - Write a New Review
-                3 - Delete Your Review(s)
-                4 - Update Your Review
-                5 - Go Back
-                0 - Quit Program
+                    Please select:
+                    1 - See Reviews
+                    2 - Write a New Review
+                    3 - Delete Your Review(s)
+                    4 - Update Your Review
+                    5 - Go Back
+                    0 - Quit Program
 
-                ENTER: '''))
-        if choice == 1:
-            teacher_page = 1
-            teacher_reviews(teacher)
-        elif choice == 2:
-            teacher_page = 1
-            teacher_write_review(teacher)
-        elif choice == 3:
-            teacher_page = 1
-            teacher_delete_page(teacher)
-        elif choice == 4:
-            teacher_page = 1
-            teacher_update_review(teacher)
-        elif choice == 5:
-            teacher_page = 1
-            main_menu()
-        elif choice == 0:
-            teacher_page = 0
+                    ENTER: '''))
+            if choice == 1:
+                teacher_page = 1
+                teacher_reviews(teacher)
+            elif choice == 2:
+                teacher_page = 1
+                teacher_write_review(teacher)
+            elif choice == 3:
+                teacher_page = 1
+                teacher_delete_page(teacher)
+            elif choice == 4:
+                teacher_page = 1
+                teacher_update_review(teacher)
+            elif choice == 5:
+                teacher_page = 1
+                main_menu()
+            elif choice == 0:
+                teacher_page = 0
+    except ValueError:
+        print("Invalid selection. Please use an option that is available.")
+        time.sleep(2)
+        teacher_page(teacher)
 
 def teacher_reviews(teacher):
     teacher_review_page = 0
