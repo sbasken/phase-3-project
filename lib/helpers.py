@@ -12,10 +12,6 @@ session = Session()
 
 YES = ['Y', 'y', 'ye', 'yes']
 NO = ['N', 'n','no']
-# line = '-'*50 
-#adds line
-# line_db = '\n' + line + '\n' 
-#adds line with double spacing
 
 
 def main_menu():
@@ -382,7 +378,12 @@ def teacher_reviews(teacher):
 
 
 def teacher_write_review(teacher):
-    print('')
+    print('''
+ ^ ^                                 
+(O,O)                                
+(   ) Thank you for taking the time to leave feedback!    
+-"-"---------------------------------------------------
+''')
     teacher_review = str(input("Write your Honest Review: "))
     teacher_rating = float(input("Leave your Honest Rating of the Program (1-5): "))
 
@@ -392,6 +393,7 @@ def teacher_write_review(teacher):
     session.commit()
 
     print('Thank you for Submitting a Review!')
+    time.sleep(1)
     teacher_page(teacher)
 
 def teacher_delete_page(teacher):
@@ -426,20 +428,24 @@ def teacher_delete_page(teacher):
                     selected_review = review_list[review_choice - 1]
                     session.delete(selected_review)
                     session.commit()
-                    print("Review successfully deleted!")
+                    print("""
+  Review Successfully Deleted!
+  """)
                     time.sleep(1)
                     teacher_page(teacher)
             elif prompt in NO:
                 print("Thanks for Visiting!")
             else: 
                 print("Invalid Input - Please Try Again!")
+                time.sleep(1)
+                teacher_delete_page(teacher)
             
     
 
 def teacher_update_review(teacher):
     reviews = session.query(Review).filter_by(teacher_id=teacher.id).all()
     if not reviews:
-        print("You have no reviews to edit!")
+        print("You Have No Reviews to Edit!")
         time.sleep(1)
         teacher_page(teacher)
     else:
@@ -448,18 +454,20 @@ def teacher_update_review(teacher):
         if review_choice == 0:
             teacher_page(teacher)
         elif review_choice > len(reviews):
-            print("Oops! This is an invalid selection. Please try again.")
+            print("Oops! This is an Invalid Selection. Please Try Again.")
             time.sleep(1)
             teacher_update_review(teacher)
         else:
             selected_review = reviews[review_choice - 1]
-            new_comment = input("Enter your new comment: ")
-            new_rating = float(input("Enter your new rating (1-5): "))
+            new_comment = input("Enter Your New Comment: ")
+            new_rating = float(input("Enter Your New Rating (1-5): "))
             selected_review.comment = new_comment
             selected_review.rating = new_rating
 
             session.commit()
-            print("Review updated successfully!")
+            print("""
+  Review Updated Successfully!
+  """)
             time.sleep(1)
             teacher_page(teacher)
 
